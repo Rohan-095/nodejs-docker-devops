@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Docker Desktop default binary path for Windows
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+    }
+
     stages {
 
         stage('Environment Check') {
@@ -31,11 +36,8 @@ pipeline {
 
         stage('Docker Run / Deploy') {
             steps {
-                // Pehle agar purana container chal raha ho toh usko stop & remove karenge
                 bat 'docker stop nodejs-app-container || exit 0'
                 bat 'docker rm nodejs-app-container || exit 0'
-                
-                // Naya container run karenge
                 bat 'docker run -d -p 3000:3000 --name nodejs-app-container nodejs-docker-devops:latest'
             }
         }
