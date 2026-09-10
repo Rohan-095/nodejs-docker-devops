@@ -1,18 +1,13 @@
 pipeline {
     agent any
 
-    environment {
-        // Docker Desktop default binary path for Windows
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
-    }
-
     stages {
 
         stage('Environment Check') {
             steps {
                 bat 'node --version'
                 bat 'npm --version'
-                bat 'docker --version'
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" --version'
             }
         }
 
@@ -30,15 +25,15 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t nodejs-docker-devops:latest .'
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t nodejs-docker-devops:latest .'
             }
         }
 
         stage('Docker Run / Deploy') {
             steps {
-                bat 'docker stop nodejs-app-container || exit 0'
-                bat 'docker rm nodejs-app-container || exit 0'
-                bat 'docker run -d -p 3000:3000 --name nodejs-app-container nodejs-docker-devops:latest'
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" stop nodejs-app-container || exit 0'
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" rm nodejs-app-container || exit 0'
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" run -d -p 3000:3000 --name nodejs-app-container nodejs-docker-devops:latest'
             }
         }
     }
